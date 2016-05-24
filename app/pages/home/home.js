@@ -1,0 +1,20 @@
+import {Page, NavController} from 'ionic-angular';
+
+/*
+  Generated class for the HomePage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+*/
+@Page({
+  templateUrl: 'build/pages/home/home.html',
+})
+export class HomePage {
+  static get parameters() {
+    return [[NavController]];
+  }
+
+  constructor(nav) {
+    this.nav = nav;
+  }
+}
