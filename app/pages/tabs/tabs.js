@@ -1,18 +1,23 @@
-import {Page} from 'ionic-angular';
-import {Page1} from '../page1/page1';
-import {Page2} from '../page2/page2';
-import {Page3} from '../page3/page3';
+import {Page, NavParams} from 'ionic-angular';
+import {MarketDataPage} from '../market-data/market-data';
+import {ProTradePage} from '../pro-trade/pro-trade';
+import {AccountPage} from '../account/account';
 
 
 @Page({
   templateUrl: 'build/pages/tabs/tabs.html'
 })
 export class TabsPage {
-  constructor() {
-    // this tells the tabs component which Pages
-    // should be each tab's root Page
-    this.tab1Root = Page1;
-    this.tab2Root = Page2;
-    this.tab3Root = Page3;
+  static get parameters() {
+    return [[NavParams]];
+  }
+
+  constructor(navParams) {
+    this.mySelectedIndex = navParams.data.tabIndex || 0;
+
+    // set the root pages for each tab
+    this.tab1Root = MarketDataPage;
+    this.tab2Root = ProTradePage;
+    this.tab3Root = AccountPage;
   }
 }
