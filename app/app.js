@@ -43,10 +43,10 @@ class ConferenceApp {
     platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
+      this.webSocket.connectToWebsocket();
     });
 
     // load the websocket data
-    websocket.load();
 
     // We plan to add auth to only show the login page if not logged in
     this.root = TutorialPage;
