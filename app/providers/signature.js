@@ -9,7 +9,7 @@ import {Storage, LocalStorage, Events} from 'ionic-angular';
   for more info on providers and Angular 2 DI.
 */
 @Injectable()
-export class GetSignature {
+export class Signature {
   static get parameters(){
     return [[Events]]
   }
@@ -19,5 +19,11 @@ export class GetSignature {
     this.data = null;
   }
 
-  
+  getSignature(){
+    var joinStr = Array.prototype.join.call(arguments, '');
+    var shaObj = new jsSHA(joinStr, "TEXT");
+    var hmac = shaObj.getHMAC(accountInfo.accountKey, "TEXT", "SHA-1", "HEX");
+    return hmac;
+  }
+
 }

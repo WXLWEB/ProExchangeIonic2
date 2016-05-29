@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {$WebSocket} from 'angular2-websocket/angular2-websocket';
 import {Observable} from 'rxjs/Rx';
+// import {Request} from '../request';
 
 /*
   Generated class for the WebSocket provider.
@@ -17,15 +18,15 @@ export class WebSocket {
 
   constructor(http) {
     this.http = http;
+    // this.request = request;
     // this.ws = new $WebSocket('wss://pro-ws-staging.btcc.com:2012');
     this.data = null;
   }
 
   connectToWebsocket() {
-    this.ws = new $WebSocket("wss://pro-ws-staging.btcc.com:2012"); //dummy echo websocket service
+    this.ws = new $WebSocket("wss://pro-ws.btcc.com:2012"); //dummy echo websocket service
     console.log('websocket:',this.ws);
     this.ws.send("Hello");
-
     this.ws.onOpen(function (msg) {
       console.log('websocket connection');
       // if (angular.isDefined(reconnection)) {
