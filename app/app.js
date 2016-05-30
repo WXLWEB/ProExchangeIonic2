@@ -4,6 +4,8 @@ import {StatusBar, Splashscreen} from 'ionic-native';
 import {WebSocket} from './providers/web-socket/web-socket';
 import {ConferenceData} from './providers/conference-data';
 import {UserData} from './providers/user-data';
+import {Signature} from './providers/signature';
+import {Request} from './providers/request';
 import {TabsPage} from './pages/tabs/tabs';
 import {LoginPage} from './pages/login/login';
 import {SignupPage} from './pages/signup/signup';
@@ -12,7 +14,7 @@ import {TutorialPage} from './pages/tutorial/tutorial';
 
 @App({
   templateUrl: 'build/app.html',
-  providers: [WebSocket, ConferenceData, UserData],
+  providers: [WebSocket, ConferenceData, UserData, Request, Signature],
   // Set any config for your app here, see the docs for
   // more ways to configure your app:
   // http://ionicframework.com/docs/v2/api/config/Config/
@@ -29,15 +31,16 @@ import {TutorialPage} from './pages/tutorial/tutorial';
 class ConferenceApp {
   static get parameters() {
     return [
-      [Events], [WebSocket], [ConferenceData], [UserData], [Platform], [MenuController]
+      [Events], [WebSocket], [ConferenceData], [UserData], [Platform], [MenuController], [Request]
     ]
   }
 
-  constructor(events, websocket, confData, userData, platform, menu) {
+  constructor(events, websocket, confData, userData, platform, menu, request) {
     this.webSocket = websocket;
     this.userData = userData;
     this.events = events;
     this.menu = menu;
+    this.request = request;
 
     // Call any initial plugins when ready
     platform.ready().then(() => {
@@ -45,6 +48,7 @@ class ConferenceApp {
       Splashscreen.hide();
       this.webSocket.connectToWebsocket();
     });
+
 
     // load the websocket data
 
@@ -76,7 +80,29 @@ class ConferenceApp {
     });
 
     this.listenToLoginEvents();
+    this.sendGetTradesRequest("XBTCNY");
+    // this.sendGetOrdersRequest();
+    this.sendGetQuoteRequest("XBTCNY");
+    this.sendGetQuoteRequest("BPICNY");
   }
+
+  sendGetTradesRequest(contract) {
+    var data = this.request.createGetTradesRequest(20,contract);
+    this.webSocket.send(data);
+  }
+
+  //send getQuoteRequest
+  sendGetQuoteRequest(contract) {
+    var data = this.request.createQuoteRequest(contract,'2')
+    this.webSocket.send(data);
+  }
+
+  sendGetOrdersRequest() {
+    var request1 = this.request.createGetOrdersRequest('0', Date.now().toString(), "A,0,1,2");
+    this.webSocket.send(request1);
+    var request2 = this.request.createGetOrdersRequest((Date.now()-1000*60*60*24).toString(), (Date.now()+1000*60*60*24).toString(), "3,S");
+    this.webSocket.send(request2);
+  };
 
   openPage(page) {
     // find the nav component and set what the root page should be

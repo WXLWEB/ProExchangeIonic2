@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
 import {$WebSocket} from 'angular2-websocket/angular2-websocket';
 import {Observable} from 'rxjs/Rx';
-// import {Request} from '../request';
+import {Request} from '../request';
+import {Signature} from '../signature';
+var _ = require('lodash');
 
 /*
   Generated class for the WebSocket provider.
@@ -13,20 +14,21 @@ import {Observable} from 'rxjs/Rx';
 @Injectable()
 export class WebSocket {
   static get parameters(){
-    return [[Http]]
+    return [[Request],[Signature]]
   }
 
-  constructor(http) {
+  constructor(http, request, signature) {
     this.http = http;
-    // this.request = request;
+    this.request = request;
+    this.signature = signature;
     // this.ws = new $WebSocket('wss://pro-ws-staging.btcc.com:2012');
     this.data = null;
+    this.ws = new $WebSocket("wss://pro-ws-staging.btcc.com:2012"); //dummy echo websocket services
   }
 
   connectToWebsocket() {
-    this.ws = new $WebSocket("wss://pro-ws.btcc.com:2012"); //dummy echo websocket service
     console.log('websocket:',this.ws);
-    this.ws.send("Hello");
+    // this.ws.send("Hello");
     this.ws.onOpen(function (msg) {
       console.log('websocket connection');
       // if (angular.isDefined(reconnection)) {
@@ -47,30 +49,15 @@ export class WebSocket {
       //     break;
       //   case 'ErrorResponse':
       //     if (data.ResultCode == '0') {
-      //       Session.setLogin(false);
+      //       session.setLogin(false);
       //     }
       //     $log.error('errorresponse:', data);
       //     break;
-      //   // case 'GetRiskProfilesResponse':
-      //   //   riskProfile.processIncoming(data);
-      //   //   break;
-      //   case 'AccountInfo':
-      //     $log.debug("AccountInfo:", data);
-      //     AccountInfo.processIncoming(data);
-      //     var is_logged_in = (data.ResultCode === '0') || false;
-      //     Session.setLogin(is_logged_in);
+      //   case 'GetRiskProfilesResponse':
+      //     riskProfile.processIncoming(data);
       //     break;
-      //   case 'ExecReport':
-      //     ExecReport.processIncoming(data);
-      //     break;
-      //   // case 'ExecTransactions':
-      //   //   orderHistory.processIncoming(data);
-      //   //   break;
-      //   case 'Ticker':
-      //     $log.debug("Ticker:", data);
-      //     Ticker.processIncoming(data);
-      //     // ExecReport.processIncoming({});
-      //     // accountInfo.processIncoming();
+      //   case 'ExecTransactions':
+      //     orderHistory.processIncoming(data);
       //     break;
       //   case 'ExecTrade':
       //     $log.debug("ExecTrade:", data);
@@ -83,24 +70,58 @@ export class WebSocket {
       //       ExecTrade.processIncoming(trade);
       //     });
       //     break;
-      //   // //case 'GetActiveContractsResponse':
-      //   // //  $log.debug("GetActiveContractsResponse:", data);
-      //   // //  ticker.activeContracts = data.Contracts;
-      //   // //  break;
-      //   // case 'MarketStatusChangedResponse':
-      //   //   $log.debug("MarketStatusChangedResponse:",data);
-      //   //   marketStatus.processIncoming(data);
-      //   //   break;
-      //   // case 'OrderCancelReject':
-      //   //   execReport.processIncoming(data);
-      //   //   break;
-      //   case 'OrderBookResponse':
-      //     $log.debug("OrderBookResponse:",data);
-      //     OrderBookResponse.processIncoming(data,$rootScope.groupOrderbookArgs,$rootScope.groupMarketDepthArgs);
+      //   //case 'GetActiveContractsResponse':
+      //   //  $log.debug("GetActiveContractsResponse:", data);
+      //   //  Ticker.activeContracts = data.Contracts;
+      //   //  break;
+      //   case 'MarketStatusChangedResponse':
+      //     $log.debug("MarketStatusChangedResponse:",data);
+      //     marketStatus.processIncoming(data);
+      //     break;
+      //   case 'OrderCancelReject':
+      //     execReport.processIncoming(data);
+      //     break;
+      //   case 'QuoteResponse':
+      //     $log.debug("QuoteResponse:",data);
+      //     OrderBook.clearOrderBook();
+      //     OrderBook.processIncoming(data.OrderBook,$rootScope.groupOrderbookArgs,$rootScope.groupMarketDepthArgs);
+      //     Ticker.processIncoming(data.Ticker);
+      //     break;
+      //   case 'OrderBook':
+      //     $log.debug("OrderBook:",data.OrderBook)
+      //     OrderBook.processIncoming(data.OrderBook,$rootScope.groupOrderbookArgs,$rootScope.groupMarketDepthArgs);
+      //   case 'Ticker':
+      //     $log.debug("Ticker:", data);
+      //     Ticker.processIncoming(data);
+      //     execReport.processIncoming({});
+      //     accountInfo.processIncoming();
+      //     break;
+      //   case 'LoginResponse':
+      //     $log.debug("LoginResponse:",data);
+      //     break;
+      //   case 'GetAccountInfoResponse':
+      //     $log.debug("GetAccountInfoResponse",data);
+      //     break;
+      //   case 'AccountInfo':
+      //     $log.debug("AccountInfo:", data);
+      //     accountInfo.processIncoming(data);
+      //     riskProfile.processIncoming(data);
+      //     var is_logged_in = (data.ResultCode === '0') || false;
+      //     session.setLogin(is_logged_in);
+      //     break;
+      //   case 'GetOrdersResponse':
+      //     $log.debug('GetOrdersResponse:',data);
+      //     execReport.processIncoming(data);
+      //     break;
+      //   case 'ExecReport':
+      //     $log.debug("ExecReport:", data);
+      //     execReport.processIncoming(data);
       //     break;
       //   default:
-      //     $log.debug('have something no handle:' + JSON.stringify(data));
+      //     $log.debug('have something no handle Msgtype:',type);
+      //     $log.debug('have something no handle:',JSON.stringify(data));
       // }
+      //
     });
     this.ws.onError(function (msg) {
       console.log('websocket is disconnection');
@@ -116,9 +137,9 @@ export class WebSocket {
 
   send(param){
     console.log("sent param:", param);
-    if (!_.has(param, 'Signature')) {
-      param.Signature = _.spread(getSignature)(_.valuesIn(param));
-    }
-    return ws.send(JSON.stringify(param));//TODO: add a then/error clause and log success/error
+    // if (!_.has(param, 'Signature')) {
+    //   param.Signature = _.spread(this.signature.getSignature)(_.valuesIn(param));
+    // }
+    return this.ws.send(JSON.stringify(param));//TODO: add a then/error clause and log success/error
   }
 }
