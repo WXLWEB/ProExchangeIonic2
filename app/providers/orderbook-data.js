@@ -1,22 +1,19 @@
 import {Injectable} from '@angular/core';
-import {Storage, LocalStorage, Events} from 'ionic-angular';
 
+/*
+  Generated class for the OrderbookData provider.
 
+  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
+  for more info on providers and Angular 2 DI.
+*/
 @Injectable()
-export class OrderBookData {
+export class OrderbookData {
   static get parameters(){
-    return [[Events]];
+    return []
   }
 
-  constructor(events) {
-    this.events = events;
-    this.orderbook = {
-      ask:[],
-      bid:[],
-      askData:{},
-      bidData:{},
-      version:0
-    }
+  constructor() {
+    this.data = null;
   }
 
   processIncoming(data){

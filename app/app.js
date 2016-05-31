@@ -1,12 +1,12 @@
 import {ViewChild} from '@angular/core';
 import {App, Events, Platform, MenuController} from 'ionic-angular';
 import {StatusBar, Splashscreen} from 'ionic-native';
-import {WebSocket} from './providers/web-socket/web-socket';
+import {WebSocket} from './providers/web-socket';
 import {ConferenceData} from './providers/conference-data';
 import {UserData} from './providers/user-data';
 import {Signature} from './providers/signature';
 import {Request} from './providers/request';
-import {OrderBookData} from './providers/orderbook-data';
+import {OrderbookData} from './providers/orderbook-data';
 import {TabsPage} from './pages/tabs/tabs';
 import {LoginPage} from './pages/login/login';
 import {SignupPage} from './pages/signup/signup';
@@ -15,7 +15,7 @@ import {TutorialPage} from './pages/tutorial/tutorial';
 
 @App({
   templateUrl: 'build/app.html',
-  providers: [WebSocket, ConferenceData, UserData, Request, Signature, OrderBookData],
+  providers: [WebSocket, ConferenceData, UserData, Request, Signature, OrderbookData],
   // Set any config for your app here, see the docs for
   // more ways to configure your app:
   // http://ionicframework.com/docs/v2/api/config/Config/
@@ -32,16 +32,17 @@ import {TutorialPage} from './pages/tutorial/tutorial';
 class ConferenceApp {
   static get parameters() {
     return [
-      [Events], [WebSocket], [ConferenceData], [UserData], [Platform], [MenuController], [Request]
+      [Events], [WebSocket], [ConferenceData], [UserData], [Platform], [MenuController], [Request], [OrderbookData]
     ]
   }
 
-  constructor(events, websocket, confData, userData, platform, menu, request) {
+  constructor(events, websocket, confData, userData, platform, menu, request, orderbook) {
     this.webSocket = websocket;
     this.userData = userData;
     this.events = events;
     this.menu = menu;
     this.request = request;
+    this.orderbook = orderbook;
 
     // Call any initial plugins when ready
     platform.ready().then(() => {
