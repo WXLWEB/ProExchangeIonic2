@@ -6,6 +6,7 @@ import {ConferenceData} from './providers/conference-data';
 import {UserData} from './providers/user-data';
 import {Signature} from './providers/signature';
 import {Request} from './providers/request';
+import {OrderBookData} from './providers/orderbook-data';
 import {TabsPage} from './pages/tabs/tabs';
 import {LoginPage} from './pages/login/login';
 import {SignupPage} from './pages/signup/signup';
@@ -14,7 +15,7 @@ import {TutorialPage} from './pages/tutorial/tutorial';
 
 @App({
   templateUrl: 'build/app.html',
-  providers: [WebSocket, ConferenceData, UserData, Request, Signature],
+  providers: [WebSocket, ConferenceData, UserData, Request, Signature, OrderBookData],
   // Set any config for your app here, see the docs for
   // more ways to configure your app:
   // http://ionicframework.com/docs/v2/api/config/Config/

@@ -3,6 +3,7 @@ import {$WebSocket} from 'angular2-websocket/angular2-websocket';
 import {Observable} from 'rxjs/Rx';
 import {Request} from '../request';
 import {Signature} from '../signature';
+import {OrderBookData} from '../orderbook-data';
 var _ = require('lodash');
 
 /*
@@ -14,13 +15,14 @@ var _ = require('lodash');
 @Injectable()
 export class WebSocket {
   static get parameters(){
-    return [[Request],[Signature]]
+    return [[Request],[Signature],[OrderBookData]]
   }
 
-  constructor(http, request, signature) {
+  constructor(http, request, signature,orderBookData) {
     this.http = http;
     this.request = request;
     this.signature = signature;
+    this.orderBookData = orderBookData;
     // this.ws = new $WebSocket('wss://pro-ws-staging.btcc.com:2012');
     this.data = null;
     this.ws = new $WebSocket("wss://pro-ws-staging.btcc.com:2012"); //dummy echo websocket services
@@ -42,86 +44,83 @@ export class WebSocket {
       console.log('data:',data);
       var type = data.MsgType;
       if(type != 'Heartbeat'){
-        console.debug(data);
+        // console.debug(data);
       }
-      // switch (type) {
-      //   case 'Heartbeat':
-      //     break;
-      //   case 'ErrorResponse':
-      //     if (data.ResultCode == '0') {
-      //       session.setLogin(false);
-      //     }
-      //     $log.error('errorresponse:', data);
-      //     break;
-      //   case 'GetRiskProfilesResponse':
-      //     riskProfile.processIncoming(data);
-      //     break;
-      //   case 'ExecTransactions':
-      //     orderHistory.processIncoming(data);
-      //     break;
-      //   case 'ExecTrade':
-      //     $log.debug("ExecTrade:", data);
-      //     ExecTrade.processIncoming(data);
-      //     break;
-      //   case 'GetTradesResponse':
-      //     $log.debug("GetTradesResponse:", data);
-      //     ExecTrade.clearTrades();
-      //     _.forEach(data.Trades, function (trade) {
-      //       ExecTrade.processIncoming(trade);
-      //     });
-      //     break;
-      //   //case 'GetActiveContractsResponse':
-      //   //  $log.debug("GetActiveContractsResponse:", data);
-      //   //  Ticker.activeContracts = data.Contracts;
-      //   //  break;
-      //   case 'MarketStatusChangedResponse':
-      //     $log.debug("MarketStatusChangedResponse:",data);
-      //     marketStatus.processIncoming(data);
-      //     break;
-      //   case 'OrderCancelReject':
-      //     execReport.processIncoming(data);
-      //     break;
-      //   case 'QuoteResponse':
-      //     $log.debug("QuoteResponse:",data);
-      //     OrderBook.clearOrderBook();
-      //     OrderBook.processIncoming(data.OrderBook,$rootScope.groupOrderbookArgs,$rootScope.groupMarketDepthArgs);
-      //     Ticker.processIncoming(data.Ticker);
-      //     break;
-      //   case 'OrderBook':
-      //     $log.debug("OrderBook:",data.OrderBook)
-      //     OrderBook.processIncoming(data.OrderBook,$rootScope.groupOrderbookArgs,$rootScope.groupMarketDepthArgs);
-      //   case 'Ticker':
-      //     $log.debug("Ticker:", data);
-      //     Ticker.processIncoming(data);
-      //     execReport.processIncoming({});
-      //     accountInfo.processIncoming();
-      //     break;
-      //   case 'LoginResponse':
-      //     $log.debug("LoginResponse:",data);
-      //     break;
-      //   case 'GetAccountInfoResponse':
-      //     $log.debug("GetAccountInfoResponse",data);
-      //     break;
-      //   case 'AccountInfo':
-      //     $log.debug("AccountInfo:", data);
-      //     accountInfo.processIncoming(data);
-      //     riskProfile.processIncoming(data);
-      //     var is_logged_in = (data.ResultCode === '0') || false;
-      //     session.setLogin(is_logged_in);
-      //     break;
-      //   case 'GetOrdersResponse':
-      //     $log.debug('GetOrdersResponse:',data);
-      //     execReport.processIncoming(data);
-      //     break;
-      //   case 'ExecReport':
-      //     $log.debug("ExecReport:", data);
-      //     execReport.processIncoming(data);
-      //     break;
-      //   default:
-      //     $log.debug('have something no handle Msgtype:',type);
-      //     $log.debug('have something no handle:',JSON.stringify(data));
-      // }
-      //
+      switch (type) {
+        case 'Heartbeat':
+          break;
+        case 'ErrorResponse':
+          if (data.ResultCode == '0') {
+            session.setLogin(false);
+          }
+          console.log('errorresponse:', data);
+          break;
+        case 'GetRiskProfilesResponse':
+          riskProfile.processIncoming(data);
+          break;
+        case 'ExecTransactions':
+          orderHistory.processIncoming(data);
+          break;
+        case 'ExecTrade':
+          console.log("ExecTrade:", data);
+          ExecTrade.processIncoming(data);
+          break;
+        // case 'GetTradesResponse':
+        //   console.log("GetTradesResponse:", data);
+        //   ExecTrade.clearTrades();
+        //   _.forEach(data.Trades, function (trade) {
+        //     ExecTrade.processIncoming(trade);
+        //   });
+        //   break;
+
+        case 'MarketStatusChangedResponse':
+          console.log("MarketStatusChangedResponse:",data);
+          marketStatus.processIncoming(data);
+          break;
+        case 'OrderCancelReject':
+          execReport.processIncoming(data);
+          break;
+        case 'QuoteResponse':
+          console.log("QuoteResponse:",data);
+          this.orderBookData.clearOrderBook();
+          this.orderBookData.processIncoming(data.OrderBook);
+          // Ticker.processIncoming(data.Ticker);
+          break;
+        case 'OrderBook':
+          console.log("OrderBook:",data.OrderBook)
+          OrderBook.processIncoming(data.OrderBook,$rootScope.groupOrderbookArgs,$rootScope.groupMarketDepthArgs);
+        case 'Ticker':
+          console.log("Ticker:", data);
+          Ticker.processIncoming(data);
+          execReport.processIncoming({});
+          accountInfo.processIncoming();
+          break;
+        case 'LoginResponse':
+          console.log("LoginResponse:",data);
+          break;
+        case 'GetAccountInfoResponse':
+          console.log("GetAccountInfoResponse",data);
+          break;
+        case 'AccountInfo':
+          console.log("AccountInfo:", data);
+          accountInfo.processIncoming(data);
+          riskProfile.processIncoming(data);
+          var is_logged_in = (data.ResultCode === '0') || false;
+          session.setLogin(is_logged_in);
+          break;
+        case 'GetOrdersResponse':
+          console.log('GetOrdersResponse:',data);
+          execReport.processIncoming(data);
+          break;
+        case 'ExecReport':
+          console.log("ExecReport:", data);
+          execReport.processIncoming(data);
+          break;
+        default:
+          console.log('have something no handle Msgtype:',type);
+          console.log('have something no handle:',JSON.stringify(data));
+      }
+
     });
     this.ws.onError(function (msg) {
       console.log('websocket is disconnection');

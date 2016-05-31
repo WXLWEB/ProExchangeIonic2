@@ -16,5 +16,6 @@ export class ProTradePage {
 
   constructor(nav) {
     this.nav = nav;
+    this.platform = 'xbtcny';
   }
 }
