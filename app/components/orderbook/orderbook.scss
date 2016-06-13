@@ -1,0 +1,167 @@
+.orderbook_box{
+  overflow: hidden;
+  position: relative;
+  .orderbook{
+    position: absolute;
+    border: 1px solid $border-color;
+    padding: 0.5rem 0;
+    height: 100%;
+    width: calc(100% - 10px);
+    top:0;
+    bottom: 0;
+  }
+  .header,.sell,.buy{
+    .col{
+      font-size: 1rem;
+      line-height: 1.5rem;
+      padding: 0;
+      color: $value-font-color;
+      &:first-of-type{
+        width: 40%;
+        padding-left: 2rem;
+      }
+      &:nth-of-type(2),&:last-of-type{
+        width: 30%;
+      }
+    }
+  }
+  .header{
+    &.row{
+      padding-left: 0;
+    }
+    .col{
+      color: $key-font-color;
+    }
+  }
+  .deal{
+    .row{
+      margin: 0;
+      padding: 0;
+      & + .row{
+        margin: 0;
+        padding: 0;
+      }
+      &:hover{
+        background-color: $bgcolor-gray;
+      }
+    }
+    .sell{
+      .row{
+        &:last-of-type{
+          position: relative;
+          &:after{
+            content: "";
+            height:0;
+            width:0;
+            overflow: hidden;
+            font-size: 0;
+            line-height: 0;
+            vertical-align: middle;
+            border-top: 0.3rem solid transparent;
+            border-bottom: 0.3rem solid transparent;
+            position: absolute;
+            top:0.5rem;
+            left:0.8rem;
+          }
+        }
+      }
+    }
+    .buy{
+      .row{
+        &:first-of-type{
+          position: relative;
+          &:before{
+            content: "";
+            height:0;
+            width:0;
+            overflow: hidden;
+            font-size: 0;
+            line-height: 0;
+            vertical-align: middle;
+            border-top: 0.3rem solid transparent;
+            border-bottom: 0.3rem solid transparent;
+            position: absolute;
+            top:0.5rem;
+            left:0.8rem;
+          }
+        }
+      }
+    }
+    .sell{
+      .col{
+        &:first-of-type{
+          color: $font-red!important;
+        }
+      }
+      .row{
+        &:last-of-type{
+          &:after{
+            border-left: 0.8rem solid $font-red;
+          }
+        }
+      }
+    }
+    .buy{
+      .col{
+        &:first-of-type{
+          color: $font-green!important;
+        }
+      }
+      .row{
+        &:first-of-type{
+          &:before{
+            border-left: 8px solid $font-green;
+          }
+        }
+      }
+    }
+  }
+  .tradeState{
+    margin: 0 1.8rem;
+    padding: 0.2rem 0;
+    height: 3rem;
+    line-height: 1;
+    overflow: hidden;
+    .row{
+      &:hover{
+        background: none;
+      }
+      .col{
+        padding: 0;
+        &:first-of-type{text-align: right;
+          span{
+            line-height: 2.6rem;
+          }
+        }
+        &:last-of-type{text-align: left;padding-left: 0.5rem;
+          span{
+            line-height: 2.6rem;
+          }
+        }
+      }
+    }
+    .ion-arrow-up-a,.newdealprice-up{
+      color:$font-bright-green-color;
+      line-height: 2rem;
+    }
+    .ion-arrow-up-a,.ion-arrow-down-a{
+      font-size: 1.2rem;
+      line-height: 2rem;
+    }
+    .newdealprice-up,.newdealprice-down{
+      font-size: 1.3rem;
+    }
+    .ion-arrow-down-a,.newdealprice-down{
+      color: $font-red;
+    }
+    .points-up{
+      color:$font-bright-green-color;
+      font-size: 1rem;
+    }
+    .points-down{
+      float:right;
+      color:$font-red;
+      font-size: 1rem;
+    }
+  }
+}

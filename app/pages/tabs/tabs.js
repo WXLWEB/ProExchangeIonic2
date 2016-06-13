@@ -1,5 +1,5 @@
 import {Page, NavParams} from 'ionic-angular';
-import {MarketDataPage} from '../market-data/market-data';
+import {MarketPage} from '../market/market';
 import {ProTradePage} from '../pro-trade/pro-trade';
 import {AccountPage} from '../account/account';
 
@@ -16,7 +16,7 @@ export class TabsPage {
     this.mySelectedIndex = navParams.data.tabIndex || 0;
 
     // set the root pages for each tab
-    this.tab1Root = MarketDataPage;
+    this.tab1Root = MarketPage;
     this.tab2Root = ProTradePage;
     this.tab3Root = AccountPage;
   }
