@@ -8,50 +8,56 @@ export class MarketData {
     return [[Http]];
   }
 
-  constructor(http, user) {
+  constructor(http) {
     // inject the Http provider and set to this instance
     this.http = http;
-  }
-
-  fetchTicker(url) {
-    return new Promise(resolve => {
-      // We're using Angular Http provider to request the data,
-      // then on the response it'll map the JSON data to a parsed JS object.
-      // Next we process the data and resolve the promise with the new data.
-      this.http.get(url).subscribe(res => {
-        // we've got back the raw data, now generate the core schedule data
-        // and save the data for later reference
-        this.data = res.json();
-        resolve(this.data);
+    this.data = [];
+    this.getMaketApi().then(data => {
+      data.ticker.forEach(api =>{
+         this.getTickerData(api).then(obj =>{
+           this.data.push(obj);
+           console.log(api.title+"TickerData:",this.data);
+        });
       });
     });
   }
 
-  getTickerData(url) {
-    return this.fetchTicker(url).then(data => {
-      console.log("data:",data);
-      return data;
+  loadTicker(data) {
+    return new Promise(resolve => {
+      // We're using Angular Http provider to request the data,
+      // then on the response it'll map the JSON data to a parsed JS object.
+      // Next we process the data and resolve the promise with the new data.
+      this.http.get(data.api).subscribe(res => {
+        // we've got back the raw data, now generate the core schedule data
+        // and save the data for later reference
+        resolve(res.json());
+      })
     });
   }
 
-  processData(data) {
-    // just some good 'ol JS fun with objects and arrays
-    // build up the data by linking speakers to sessions
+  getTickerData(data) {
+    return this.loadTicker(data).then(ticker => {
+      return ticker;
+    });
+  }
 
-    data.tracks = [];
+  loadMarketApi(){
+    return new Promise(resolve => {
+      // We're using Angular Http provider to request the data,
+      // then on the response it'll map the JSON data to a parsed JS object.
+      // Next we process the data and resolve the promise with the new data.
+      this.http.get('data/market-api.json').subscribe(res => {
+        // we've got back the raw data, now generate the core schedule data
+        // and save the data for later reference
+        resolve(res.json());
+      });
+    });
+  }
 
-    // // loop through each day in the schedule
-    // data.schedule.forEach(day => {
-    //   // loop through each timeline group in the day
-    //   day.groups.forEach(group => {
-    //     // loop through each session in the timeline group
-    //     group.sessions.forEach(session => {
-    //       this.processSession(data, session);
-    //     });
-    //   });
-    // });
-
-    return data;
+  getMaketApi(){
+    return this.loadMarketApi().then(data => {
+      return data;
+    });
   }
 
 }

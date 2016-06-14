@@ -29,35 +29,6 @@ export class WebSocket {
     this.ws = new $WebSocket("wss://pro-ws-staging.btcc.com:2012"); //dummy echo websocket services
   }
 
-  connectToWebsocket() {
-    console.log('this:',this);
-
-    // this.ws.send("Hello");
-    this.ws.onOpen(function (msg) {
-      console.log('websocket connection');
-      // if (angular.isDefined(reconnection)) {
-      //   $interval.cancel(reconnection);
-      //   reconnection = undefined;
-      // }
-    });
-    this.ws.onMessage(function (message) {
-      var data = message.data;
-      data = JSON.parse(data);
-      console.log('data:',data);
-      this.divide(data);
-    });
-    this.ws.onError(function (msg) {
-      console.log('websocket is disconnection');
-
-      console.error(msg);
-      // $rootScope.$broadcast('wsClosed');
-    });
-    this.ws.onClose(function (msg) {
-      console.log('websocket is disconnection');
-      // $rootScope.$broadcast('wsClosed');
-    });
-  }
-
   divide(data){
     var type = data.MsgType;
     switch (type) {
@@ -137,6 +108,33 @@ export class WebSocket {
         console.log('have something no handle:',JSON.stringify(data));
         break;
     }
+  }
+
+  connectToWebsocket() {
+    console.log('this:',this);
+
+    // this.ws.send("Hello");
+    this.ws.onOpen(function (msg) {
+      console.log('websocket connection');
+      // if (angular.isDefined(reconnection)) {
+      //   $interval.cancel(reconnection);
+      //   reconnection = undefined;
+      // }
+    });
+    this.ws.onMessage(function (message) {
+      var data = message.data;
+      data = JSON.parse(data);
+      // this.divide(data);
+    });
+    this.ws.onError(function (msg) {
+      console.log('websocket is disconnection');
+      console.error(msg);
+      // $rootScope.$broadcast('wsClosed');
+    });
+    this.ws.onClose(function (msg) {
+      console.log('websocket is disconnection');
+      // $rootScope.$broadcast('wsClosed');
+    });
   }
 
   send(param){

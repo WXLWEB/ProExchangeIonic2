@@ -18,10 +18,19 @@ export class MarketPage {
   constructor(nav,marketData) {
     this.nav = nav;
     this.marketData = marketData;
-    this.BTCC_Pro_XBTCNY = this.getProMarketTicker();
+    this.marketList = [];
+    this.getAllMaketApiTickerData();
   }
 
-  getProMarketTicker(){
-    return this.marketData.getTickerData('https://pro-data.btcc.com/data/pro/ticker?symbol=XBTCNY');
+  getAllMaketApiTickerData() {
+    return this.marketData.getMaketApi().then(data => {
+      data.ticker.forEach(api =>{
+         this.marketData.getTickerData(api).then(obj =>{
+           this.marketList.push(obj);
+           console.log("TickerData:",this.marketList);
+        });
+      });
+    });
   }
+
 }

@@ -1,0 +1,16 @@
+{
+  "ticker":[
+    {
+      "title":"BTCC Pro BTCCNY",
+      "api":"https://pro-data.btcc.com/data/pro/ticker?symbol=XBTCNY"
+    },
+    {
+      "title":"HuoBi BTCCNY",
+      "api":"http://api.huobi.com/staticmarket/ticker_btc_json.js"
+    },
+    {
+      "title":"Coinbase BTCCNY",
+      "api":"https://api.exchange.coinbase.com/products/BTC-USD/ticker"
+    }
+  ]
+}
