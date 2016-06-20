@@ -2,6 +2,7 @@ import {Page, NavParams} from 'ionic-angular';
 import {MarketPage} from '../market/market';
 import {ProTradePage} from '../pro-trade/pro-trade';
 import {AccountPage} from '../account/account';
+import {SchedulePage} from '../schedule/schedule';
 
 
 @Page({
@@ -18,6 +19,6 @@ export class TabsPage {
     // set the root pages for each tab
     this.tab1Root = MarketPage;
     this.tab2Root = ProTradePage;
-    this.tab3Root = AccountPage;
+    this.tab3Root = SchedulePage;
   }
 }

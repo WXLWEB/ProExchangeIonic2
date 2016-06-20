@@ -16,7 +16,6 @@ export class MarketData {
       data.ticker.forEach(api =>{
          this.getTickerData(api).then(obj =>{
            this.data.push(obj);
-           console.log(api.title+"TickerData:",this.data);
         });
       });
     });

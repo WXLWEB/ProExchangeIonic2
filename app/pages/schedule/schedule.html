@@ -29,11 +29,11 @@
 
 <ion-content class="schedule">
   <ion-list [hidden]="shownSessions === 0">
+    {{groups[0].time}}
 
     <ion-item-group *ngFor="let group of groups" [hidden]="group.hide">
 
       <ion-item-divider sticky>
-        {{group.time}}
       </ion-item-divider>
 
       <ion-item-sliding *ngFor="let session of group.sessions" #slidingItem [attr.track]="session.tracks[0] | lowercase" [hidden]="session.hide">

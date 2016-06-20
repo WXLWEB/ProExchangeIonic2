@@ -49,7 +49,6 @@ class ConferenceApp {
     platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
-      this.webSocket.connectToWebsocket();
     });
 
 
@@ -83,29 +82,7 @@ class ConferenceApp {
     });
 
     this.listenToLoginEvents();
-    this.sendGetTradesRequest("XBTCNY");
-    // this.sendGetOrdersRequest();
-    this.sendGetQuoteRequest("XBTCNY");
-    this.sendGetQuoteRequest("BPICNY");
   }
-
-  sendGetTradesRequest(contract) {
-    var data = this.request.createGetTradesRequest(20,contract);
-    this.webSocket.send(data);
-  }
-
-  //send getQuoteRequest
-  sendGetQuoteRequest(contract) {
-    var data = this.request.createQuoteRequest(contract,'2')
-    this.webSocket.send(data);
-  }
-
-  sendGetOrdersRequest() {
-    var request1 = this.request.createGetOrdersRequest('0', Date.now().toString(), "A,0,1,2");
-    this.webSocket.send(request1);
-    var request2 = this.request.createGetOrdersRequest((Date.now()-1000*60*60*24).toString(), (Date.now()+1000*60*60*24).toString(), "3,S");
-    this.webSocket.send(request2);
-  };
 
   openPage(page) {
     // find the nav component and set what the root page should be

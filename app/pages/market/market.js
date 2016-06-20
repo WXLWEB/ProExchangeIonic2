@@ -23,7 +23,7 @@ export class MarketPage {
   }
 
   getAllMaketApiTickerData() {
-    return this.marketData.getMaketApi().then(data => {
+    this.marketData.getMaketApi().then(data => {
       data.ticker.forEach(api =>{
          this.marketData.getTickerData(api).then(obj =>{
            this.marketList.push(obj);
