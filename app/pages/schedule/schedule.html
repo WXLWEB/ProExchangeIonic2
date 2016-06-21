@@ -29,8 +29,6 @@
 
 <ion-content class="schedule">
   <ion-list [hidden]="shownSessions === 0">
-    {{groups[0].time}}
-
     <ion-item-group *ngFor="let group of groups" [hidden]="group.hide">
 
       <ion-item-divider sticky>
