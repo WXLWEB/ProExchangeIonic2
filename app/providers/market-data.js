@@ -11,14 +11,14 @@ export class MarketData {
   constructor(http) {
     // inject the Http provider and set to this instance
     this.http = http;
-    this.data = [];
-    this.getMaketApi().then(data => {
-      data.ticker.forEach(api =>{
-         this.getTickerData(api).then(obj =>{
-           this.data.push(obj);
-        });
-      });
-    });
+    // this.data = [];
+    // this.getMaketApi().then(data => {
+    //   data.ticker.forEach(api =>{
+    //      this.getTickerData(api).then(obj =>{
+    //        this.data.push(obj);
+    //     });
+    //   });
+    // });
   }
 
   loadTicker(data) {
